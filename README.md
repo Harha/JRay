@@ -3,4 +3,4 @@ JRay
 
 a Raytracer made purely in Java.
 
-![alt tag](https://raw.githubusercontent.com/Harha/JRay/master/jray.png)
+![alt tag](https://raw.githubusercontent.com/Harha/JRay/master/jray_1.png)

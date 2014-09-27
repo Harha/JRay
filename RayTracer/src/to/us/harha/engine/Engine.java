@@ -31,7 +31,7 @@ public class Engine extends Canvas implements Runnable {
 	private static final long		serialVersionUID	= -3180700335424399722L;
 
 	// Integers
-	private final int				MAX_N				= 10;
+	private final int				MAX_N				= 5;
 	private static AtomicInteger	counter				= new AtomicInteger(0);
 
 	// Floats
@@ -86,13 +86,13 @@ public class Engine extends Canvas implements Runnable {
 		addKeyListener(input = new Input());
 
 		// Initialize multithreading stuff
-		THREAD_COUNT = 8;
+		THREAD_COUNT = 4;
 		e = Executors.newFixedThreadPool(THREAD_COUNT);
-		delta = new float[THREAD_COUNT];
-		fps = new float[THREAD_COUNT];
-		frames = new float[THREAD_COUNT];
-		lastFrame = new float[THREAD_COUNT];
-		lastFPS = new float[THREAD_COUNT];
+		delta = new float[THREAD_COUNT + 1];
+		fps = new float[THREAD_COUNT + 1];
+		frames = new float[THREAD_COUNT + 1];
+		lastFrame = new float[THREAD_COUNT + 1];
+		lastFPS = new float[THREAD_COUNT + 1];
 	}
 
 	/*
@@ -129,10 +129,15 @@ public class Engine extends Canvas implements Runnable {
 			lastFPS[i] = getTime();
 		}
 		requestFocus();
-		setupRenderThreads();
 		while (running) {
-			updateDelta(0);
-			update(delta[0]);
+			updateDelta(THREAD_COUNT);
+			update(delta[THREAD_COUNT]);
+			runRenderThreads();
+			try {
+				e.awaitTermination(25, TimeUnit.MILLISECONDS);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			render();
 		}
 		stop();
@@ -173,7 +178,6 @@ public class Engine extends Canvas implements Runnable {
 
 		counter.addAndGet(1);
 		if (counter.get() >= 100) {
-			System.out.println("FPS[0]: " + frames[0] + " FPS[1]: " + frames[1] + " FPS[2]: " + frames[2] + " FPS[3]: " + frames[3] + " FPS[4]: " + frames[4]);
 			System.out.println(e.toString());
 			counter.set(0);
 		}
@@ -183,52 +187,43 @@ public class Engine extends Canvas implements Runnable {
 	 * Start the rendering threads for each core.
 	 * Each thread renders a small portion of the screen.
 	 */
-	public void setupRenderThreads() {
+	public void runRenderThreads() {
 		e.execute(new Runnable() {
 			public void run() {
-				while (running) {
-					for (int y = 0; y < THREAD_COUNT / 2; y++) {
-						for (int x = 0; x < THREAD_COUNT / 2; x++) {
-							renderTrace(x, y, 1);
-						}
+				for (int y = 0; y < THREAD_COUNT / 2; y++) {
+					for (int x = 0; x < THREAD_COUNT / 2; x++) {
+						renderTrace(x, y, 0);
 					}
 				}
 			}
 		});
 		e.execute(new Runnable() {
 			public void run() {
-				while (running) {
-					for (int y = 0; y < THREAD_COUNT / 2; y++) {
-						for (int x = THREAD_COUNT / 2; x < THREAD_COUNT; x++) {
-							renderTrace(x, y, 2);
-						}
+				for (int y = 0; y < THREAD_COUNT / 2; y++) {
+					for (int x = THREAD_COUNT / 2; x < THREAD_COUNT; x++) {
+						renderTrace(x, y, 1);
 					}
 				}
 			}
 		});
 		e.execute(new Runnable() {
 			public void run() {
-				while (running) {
-					for (int y = THREAD_COUNT / 2; y < THREAD_COUNT; y++) {
-						for (int x = 0; x < THREAD_COUNT / 2; x++) {
-							renderTrace(x, y, 3);
-						}
+				for (int y = THREAD_COUNT / 2; y < THREAD_COUNT; y++) {
+					for (int x = 0; x < THREAD_COUNT / 2; x++) {
+						renderTrace(x, y, 2);
 					}
 				}
 			}
 		});
 		e.execute(new Runnable() {
 			public void run() {
-				while (running) {
-					for (int y = THREAD_COUNT / 2; y < THREAD_COUNT; y++) {
-						for (int x = THREAD_COUNT / 2; x < THREAD_COUNT; x++) {
-							renderTrace(x, y, 4);
-						}
+				for (int y = THREAD_COUNT / 2; y < THREAD_COUNT; y++) {
+					for (int x = THREAD_COUNT / 2; x < THREAD_COUNT; x++) {
+						renderTrace(x, y, 3);
 					}
 				}
 			}
 		});
-		System.out.println("Started all render threads succesfully!");
 	}
 
 	/*
@@ -240,11 +235,6 @@ public class Engine extends Canvas implements Runnable {
 		if (bs == null) {
 			createBufferStrategy(3);
 			return;
-		}
-		try {
-			e.awaitTermination(10, TimeUnit.MILLISECONDS);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
 		}
 		for (int i = 0; i < pixels.length; i++) {
 			pixels[i] = display.getPixel(i);
@@ -400,9 +390,6 @@ public class Engine extends Canvas implements Runnable {
 					if ((square_xz % 2) == 0) {
 						color_diffuse.scale(new RGBA(0.0f, 0.0f, 0.0f, 0.0f));
 						color_specular.scale(new RGBA(0.0f, 0.0f, 0.0f, 0.0f));
-					} else {
-						color_diffuse.scale(new RGBA(0.25f, 0.0f, 1.0f, 0.0f));
-						color_specular.scale(new RGBA(0.25f, 0.0f, 1.0f, 0.0f));
 					}
 				}
 				if (object.getType_2() == 2) {
@@ -410,9 +397,6 @@ public class Engine extends Canvas implements Runnable {
 					if ((square_yz % 2) == 0) {
 						color_diffuse.scale(new RGBA(0.0f, 0.0f, 0.0f, 0.0f));
 						color_specular.scale(new RGBA(0.0f, 0.0f, 0.0f, 0.0f));
-					} else {
-						color_diffuse.scale(new RGBA(0.5f, 1.0f, 0.0f, 0.0f));
-						color_specular.scale(new RGBA(0.5f, 1.0f, 0.0f, 0.0f));
 					}
 				}
 				if (object.getType_2() == 3) {
@@ -420,9 +404,6 @@ public class Engine extends Canvas implements Runnable {
 					if ((square_xy % 2) == 0) {
 						color_diffuse.scale(new RGBA(0.0f, 0.0f, 0.0f, 0.0f));
 						color_specular.scale(new RGBA(0.0f, 0.0f, 0.0f, 0.0f));
-					} else {
-						color_diffuse.scale(new RGBA(0.5f, 1.0f, 0.0f, 0.0f));
-						color_specular.scale(new RGBA(0.5f, 1.0f, 0.0f, 0.0f));
 					}
 				}
 				if (behindGlass) {

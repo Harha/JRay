@@ -18,7 +18,7 @@ public class Main {
 	private static Engine		engine;
 
 	public static void main(String args[]) {
-		//System.setProperty("sun.java2d.opengl","True");
+		// System.setProperty("sun.java2d.opengl","True");
 		engine = new Engine();
 		engine.frame.setResizable(false);
 		engine.frame.setTitle(TITLE + " | Initializing...");

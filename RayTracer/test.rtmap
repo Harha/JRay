@@ -1,0 +1,32 @@
+// Planes
+plane 0.0f 0.0f -20.0f 0.0f 0.0f 1.0f 1.0f 1.0f 1.0f 1.0f 0 3
+plane 0.0f 0.0f 20.0f 0.0f 0.0f -1.0f 1.0f 1.0f 1.0f 1.0f 0 3
+plane -20.0f 0.0f 0.0f 1.0f 0.0f 0.0f 1.0f 1.0f 1.0f 1.0f 0 2
+plane 20.0f 0.0f 0.0f -1.0f 0.0f 0.0f 1.0f 1.0f 1.0f 1.0f 0 2
+plane 0.0f -20.0f 0.0f 0.0f 1.0f 0.0f 1.0f 1.0f 1.0f 1.0f 2 0
+plane 0.0f -21.0f 0.0f 0.0f 1.0f 0.0f 1.0f 1.0f 1.0f 1.0f 0 1
+plane 0.0f 20.0f 0.0f 0.0f -1.0f 0.0f 1.0f 1.0f 1.0f 1.0f 0 1
+
+plane 10.0f 20.0f 0.0f -0.5f -0.5f 0.0f 1.0f 1.0f 1.0f 1.0f 1 0
+plane -10.0f 20.0f 0.0f 0.5f -0.5f 0.0f 1.0f 1.0f 1.0f 1.0f 1 0
+plane 0.0f 20.0f 10.0f 0.0f -0.5f -0.5f 1.0f 1.0f 1.0f 1.0f 1 0
+plane 0.0f 20.0f -10.0f 0.0f -0.5f 0.5f 1.0f 1.0f 1.0f 1.0f 1 0
+
+// Spheres
+sphere 10.0f -19.0f 0.0f 1.0f 1.0f 1.0f 1.0f 1.0f 0
+sphere 10.0f -19.0f 10.0f 1.0f 1.0f 1.0f 1.0f 1.0f 1
+sphere 10.0f -19.0f -10.0f 1.0f 1.0f 1.0f 1.0f 1.0f 2
+sphere -10.0f -19.0f 0.0f 0.0f 1.0f 1.0f 1.0f 1.0f 0
+sphere -10.0f -19.0f 10.0f 0.0f 1.0f 1.0f 1.0f 1.0f 1
+sphere -10.0f -19.0f -10.0f 0.0f 1.0f 1.0f 1.0f 1.0f 2
+
+sphere 0.0f -10.0f 20.0f 1.0f 1.0f 1.0f 1.0f 5.0f 1
+
+// Lights
+light 0.0f 0.0f 0.0f 1.0f 1.0f 1.0f 1.0f 16.0f
+
+// Level ambient light
+ambient 0.0f 0.0f 0.0f 1.0f
+
+// Player spawn location
+spawn 0.0f -19.0f 0.0f

@@ -5,6 +5,7 @@ import java.awt.event.KeyListener;
 
 public class Input implements KeyListener {
 
+	public boolean	esc		= false;
 	public boolean	up		= false;
 	public boolean	down	= false;
 	public boolean	left	= false;
@@ -17,6 +18,9 @@ public class Input implements KeyListener {
 	public boolean	f		= false;
 
 	public void keyPressed(KeyEvent ke) {
+		if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			esc = true;
+		}
 		if (ke.getKeyCode() == KeyEvent.VK_UP) {
 			up = true;
 		} else if (ke.getKeyCode() == KeyEvent.VK_DOWN) {
@@ -45,6 +49,9 @@ public class Input implements KeyListener {
 	}
 
 	public void keyReleased(KeyEvent ke) {
+		if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			esc = false;
+		}
 		if (ke.getKeyCode() == KeyEvent.VK_UP) {
 			up = false;
 		} else if (ke.getKeyCode() == KeyEvent.VK_DOWN) {

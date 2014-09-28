@@ -81,7 +81,7 @@ public class Engine extends Canvas implements Runnable {
 
 		// Initialize engine objects
 		display = new Display(Main.width, Main.height);
-		level = new Level("test.rtmap");
+		level = new Level("test.rtmap", "test.obj");
 		camera = new Camera(level.getPlayerSpawn(), new Vector3f(0.0f, 0.0f, -1.0f));
 		addKeyListener(input = new Input());
 
@@ -109,10 +109,10 @@ public class Engine extends Canvas implements Runnable {
 	 * Stop the main thread.
 	 */
 	public synchronized void stop() {
-		frame.setTitle(Main.TITLE + " Stopped...");
 		running = false;
+		frame.setTitle(Main.TITLE + " Stopped...");
+		System.out.println("Main worker thread stopped!");
 		try {
-			System.out.println("Main worker thread stopped!");
 			thread.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -124,17 +124,18 @@ public class Engine extends Canvas implements Runnable {
 	 * Handles the update and render methods.
 	 */
 	public void run() {
-		for (int i = 0; i < THREAD_COUNT; i++) {
+		for (int i = 0; i <= THREAD_COUNT; i++) {
 			updateDelta(i);
 			lastFPS[i] = getTime();
 		}
 		requestFocus();
 		while (running) {
 			updateDelta(THREAD_COUNT);
+			updateFPS(THREAD_COUNT);
 			update(delta[THREAD_COUNT]);
 			runRenderThreads();
 			try {
-				e.awaitTermination(25, TimeUnit.MILLISECONDS);
+				e.awaitTermination(10, TimeUnit.MILLISECONDS);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -147,9 +148,7 @@ public class Engine extends Canvas implements Runnable {
 	 * Main update method.
 	 */
 	public void update(float delta) {
-		/*
-		 * Simple camera movement.
-		 */
+		// Simple camera movement and look
 		if (input.w)
 			camera.moveForward(camera.speed * delta);
 		if (input.s)
@@ -176,9 +175,15 @@ public class Engine extends Canvas implements Runnable {
 		}
 		camera.recalc();
 
+		// Quit the program if esc is pressed down
+		if (input.esc)
+			running = false;
+
+		// Simple counter to print out info at chosen interval
 		counter.addAndGet(1);
 		if (counter.get() >= 100) {
 			System.out.println(e.toString());
+			System.out.println("FPS: " + frames[4]);
 			counter.set(0);
 		}
 	}
@@ -251,7 +256,6 @@ public class Engine extends Canvas implements Runnable {
 
 		g.dispose();
 		bs.show();
-		updateFPS(0);
 	}
 
 	/*

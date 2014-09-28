@@ -1,45 +1,15 @@
 // Planes
-//plane 0.0f 0.0f -20.0f 0.0f 0.0f 1.0f 1.0f 1.0f 1.0f 1.0f 0 0
-//plane 0.0f 0.0f 20.0f 0.0f 0.0f -1.0f 1.0f 1.0f 1.0f 1.0f 0 0
-//plane -20.0f 0.0f 0.0f 1.0f 0.0f 0.0f 1.0f 1.0f 1.0f 1.0f 0 0
-//plane 20.0f 0.0f 0.0f -1.0f 0.0f 0.0f 1.0f 1.0f 1.0f 1.0f 0 0
-//plane 0.0f -20.0f 0.0f 0.0f 1.0f 0.0f 1.0f 1.0f 1.0f 1.0f 2 0
-plane 0.0f -21.0f 0.0f 0.0f 1.0f 0.0f 1.0f 1.0f 1.0f 1.0f 0 1
-//plane 0.0f 20.0f 0.0f 0.0f -1.0f 0.0f 1.0f 1.0f 1.0f 1.0f 0 1
-
-//plane 10.0f 20.0f 0.0f -0.5f -0.5f 0.0f 1.0f 1.0f 1.0f 1.0f 1 0
-//plane -10.0f 20.0f 0.0f 0.5f -0.5f 0.0f 1.0f 1.0f 1.0f 1.0f 1 0
-//plane 0.0f 20.0f 10.0f 0.0f -0.5f -0.5f 1.0f 1.0f 1.0f 1.0f 1 0
-//plane 0.0f 20.0f -10.0f 0.0f -0.5f 0.5f 1.0f 1.0f 1.0f 1.0f 1 0
+plane 0.0f -20.0f 0.0f 0.0f 1.0f 0.0f 1.0f 1.0f 1.0f 1.0f 0 0
+plane 0.0f 20.0f 0.0f 0.0f -1.0f 0.0f 1.0f 1.0f 1.0f 1.0f 0 0
 
 // Spheres
-sphere 10.0f -18.0f 0.0f 1.0f 1.0f 1.0f 1.0f 2.0f 0
-sphere 10.0f -18.0f 10.0f 1.0f 1.0f 1.0f 1.0f 2.0f 1
-sphere 10.0f -18.0f -10.0f 1.0f 1.0f 1.0f 1.0f 2.0f 2
-sphere -10.0f -18.0f 0.0f 0.0f 1.0f 1.0f 1.0f 2.0f 0
-sphere -10.0f -18.0f 10.0f 0.0f 1.0f 1.0f 1.0f 2.0f 1
-sphere -10.0f -18.0f -10.0f 0.0f 1.0f 1.0f 1.0f 2.0f 2
-
-sphere 0.0f -10.0f 20.0f 1.0f 1.0f 1.0f 1.0f 5.0f 1
-
-// Triangles
-//triangle -20.0f -20.0f -20.0f 20.0f -20.0f -20.0f 20.0f 0.0f -20.0f 1.0f 1.0f 1.0f 1.0f false 0 0
-//triangle 20.0f 0.0f -20.0f -20.0f 0.0f -20.0f -20.0f -20.0f -20.0f 1.0f 1.0f 1.0f 1.0f false 0 0
-//triangle -20.0f -20.0f 20.0f 20.0f -20.0f 20.0f 20.0f 0.0f 20.0f 1.0f 1.0f 1.0f 1.0f true 0 0
-//triangle 20.0f 0.0f 20.0f -20.0f 0.0f 20.0f -20.0f -20.0f 20.0f 1.0f 1.0f 1.0f 1.0f true 0 0
-
+sphere -3.5f 6.75f -7.5f 1.0f 1.0f 1.0f 1.0f 2.0f 1
 
 // Lights
-light 0.0f 25.0f 0.0f 1.0f 1.0f 1.0f 1.0f 10.0f
-light 0.0f -17.5f 0.0f 0.5f 0.0f 1.0f 1.0f 5.0f
-
-light 17.5f -17.5f 17.5f 1.0f 0.0f 0.0f 1.0f 5.0f
-light 17.5f -17.5f -17.5f 0.0f 1.0f 0.0f 1.0f 5.0f
-light -17.5f -17.5f 17.5f 0.0f 0.0f 1.0f 1.0f 5.0f
-light -17.5f -17.5f -17.5f 1.0f 1.0f 0.0f 1.0f 5.0f
+light 0.0f 15.0f 0.0f 1.0f 1.0f 1.0f 1.0f 25.0f
 
 // Level ambient light
 ambient 0.0f 0.0f 0.0f 1.0f
 
 // Player spawn location
-spawn 0.0f -19.0f 0.0f
+spawn 0.0f 5.0f 0.0f

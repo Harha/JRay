@@ -17,16 +17,11 @@ public class Triangle extends Intersectable {
 	/*
 	 * Triangle constructor
 	 */
-	public Triangle(Vector3f[] vert, RGBA hue, boolean n, int type_1, int type_2) {
+	public Triangle(Vector3f[] vert, RGBA hue, int type_1, int type_2) {
 		this.vert = vert;
 		// Calculate triangle edge vectors and their direction is based on boolean n
-		if (!n) {
-			edge_1 = vert[1]._sub(vert[0]);
-			edge_2 = vert[2]._sub(vert[0]);
-		} else {
-			edge_1 = vert[2]._sub(vert[0]);
-			edge_2 = vert[1]._sub(vert[0]);
-		}
+		edge_1 = vert[1]._sub(vert[0]);
+		edge_2 = vert[2]._sub(vert[0]);
 		// calculate triangle normal vector
 		norm = edge_1.cross(edge_2)._unitV();
 		this.hue = hue;

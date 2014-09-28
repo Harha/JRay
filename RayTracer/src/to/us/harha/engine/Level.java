@@ -76,16 +76,6 @@ public class Level {
 					float sphere_r = Float.parseFloat(values[8]);
 					int sphere_t = Integer.parseInt(values[9]);
 					m_intersectables.add(new Sphere(sphere_p, sphere_c, sphere_r, sphere_t));
-				} else if (line.startsWith("triangle ")) {
-					Vector3f triangle_v1 = new Vector3f(Float.parseFloat(values[1]), Float.parseFloat(values[2]), Float.parseFloat(values[3]));
-					Vector3f triangle_v2 = new Vector3f(Float.parseFloat(values[4]), Float.parseFloat(values[5]), Float.parseFloat(values[6]));
-					Vector3f triangle_v3 = new Vector3f(Float.parseFloat(values[7]), Float.parseFloat(values[8]), Float.parseFloat(values[9]));
-					Vector3f[] verts = new Vector3f[] { triangle_v1, triangle_v2, triangle_v3 };
-					RGBA triangle_c = new RGBA(Float.parseFloat(values[10]), Float.parseFloat(values[11]), Float.parseFloat(values[12]), Float.parseFloat(values[13]));
-					boolean triangle_n = Boolean.parseBoolean(values[14]);
-					int triangle_t1 = Integer.parseInt(values[15]);
-					int triangle_t2 = Integer.parseInt(values[16]);
-					m_intersectables.add(new Triangle(verts, triangle_c, triangle_n, triangle_t1, triangle_t2));
 				} else if (line.startsWith("light ")) {
 					Vector3f light_p = new Vector3f(Float.parseFloat(values[1]), Float.parseFloat(values[2]), Float.parseFloat(values[3]));
 					RGBA light_c = new RGBA(Float.parseFloat(values[4]), Float.parseFloat(values[5]), Float.parseFloat(values[6]), Float.parseFloat(values[7]));
@@ -147,7 +137,7 @@ public class Level {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		for (int i = 0; i < faces.size() - 3; i += 3) {
+		for (int i = 0; i < faces.size(); i += 3) {
 			int index_0 = faces.get(i) - 1;
 			int index_1 = faces.get(i + 1) - 1;
 			int index_2 = faces.get(i + 2) - 1;
@@ -155,7 +145,7 @@ public class Level {
 			Vector3f vertex_2 = new Vector3f(vertices.get(0 + index_1 * 3), vertices.get(1 + index_1 * 3), vertices.get(2 + index_1 * 3));
 			Vector3f vertex_3 = new Vector3f(vertices.get(0 + index_2 * 3), vertices.get(1 + index_2 * 3), vertices.get(2 + index_2 * 3));
 			Vector3f[] verts = new Vector3f[] { vertex_1, vertex_2, vertex_3 };
-			m_intersectables.add(new Triangle(verts, new RGBA(1.0f, 1.0f, 1.0f, 1.0f), true, 0, 0));
+			m_intersectables.add(new Triangle(verts, new RGBA(1.0f, 1.0f, 1.0f, 1.0f), 0, 0));
 			System.out.println(vertex_1 + " " + vertex_2 + " " + vertex_3);
 		}
 

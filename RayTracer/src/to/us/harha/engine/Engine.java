@@ -81,7 +81,7 @@ public class Engine extends Canvas implements Runnable {
 
 		// Initialize engine objects
 		display = new Display(Main.width, Main.height);
-		level = new Level("test.rtmap", "test.obj");
+		level = new Level("test.rtmap");
 		camera = new Camera(level.getPlayerSpawn(), new Vector3f(0.0f, 0.0f, -1.0f));
 		addKeyListener(input = new Input());
 
@@ -181,7 +181,7 @@ public class Engine extends Canvas implements Runnable {
 
 		// Simple counter to print out info at chosen interval
 		counter.addAndGet(1);
-		if (counter.get() >= 100) {
+		if (counter.get() >= 1000) {
 			System.out.println(e.toString());
 			System.out.println("FPS: " + frames[4]);
 			counter.set(0);

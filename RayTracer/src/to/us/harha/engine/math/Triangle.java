@@ -27,7 +27,7 @@ public class Triangle extends Intersectable {
 		this.hue = hue;
 		this.type_1 = type_1;
 		this.type_2 = type_2;
-		this.density = 1.00f;
+		this.density = 1.25f;
 	}
 
 	/*
@@ -41,7 +41,7 @@ public class Triangle extends Intersectable {
 		// Beging calculating determinant
 		d = edge_1.dotP(P);
 		// If determinant is near zero, ray lies in the same plane as the triangle
-		if (d < 1e-3 && d > -1e-3)
+		if (d < 1e-3)
 			return null;
 		// Final determinant
 		inv_d = 1.0f / d;

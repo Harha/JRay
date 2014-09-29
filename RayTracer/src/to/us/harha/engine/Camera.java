@@ -30,8 +30,8 @@ public class Camera {
 		view = new Vector3f();
 		up = new Vector3f(0.0f, 1.0f, 0.0f);
 		right = new Vector3f();
-		yaw = 90.0f;
-		pitch = 0.0f;
+		yaw = -105.0f;
+		pitch = -10.0f;
 		speed = 0.01f;
 		recalc();
 	}

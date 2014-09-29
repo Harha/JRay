@@ -9,9 +9,9 @@ public class Main {
 	// Program's default title
 	public static final String	TITLE	= "Raytracer";
 	// Main display's drawing space width
-	public static final int		width	= 128;
+	public static final int		width	= 1000;
 	// Main display's drawing space height
-	public static final int		height	= 128;
+	public static final int		height	= 1000;
 	// Main display's drawing space scale
 	public static final int		scale	= 1;
 	// Static engine object

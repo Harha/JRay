@@ -10,30 +10,31 @@ import to.us.harha.engine.math.Intersectable;
 import to.us.harha.engine.math.Light;
 import to.us.harha.engine.math.Plane;
 import to.us.harha.engine.math.Sphere;
-import to.us.harha.engine.math.Triangle;
 import to.us.harha.engine.math.Vector3f;
 
 public class Level {
 
 	// m_intersectables contains all Intersectable objects in the current loaded level regardless of their type
-	private ArrayList<Intersectable>	m_intersectables;
+	private List<Intersectable>	m_intersectables;
 	// m_lights contains all Light objects in the current loaded level
-	private ArrayList<Light>			m_lights;
+	private List<Light>			m_lights;
+	// m_models_obj contains all models in the chosen level
+	private List<Model>			m_models_obj;
 	// m_light_ambient contains the level ambient light value
-	private RGBA						m_light_ambient;
+	private RGBA				m_light_ambient;
 	// m_player_spawn contains player spawn location
-	private Vector3f					m_player_spawn;
+	private Vector3f			m_player_spawn;
 
 	/*
 	 * Level(String path)
 	 * Level.java main constructor
 	 * Loads the level from the input path into memory
 	 */
-	public Level(String path_1, String path_2) {
+	public Level(String path_1) {
 		m_intersectables = new ArrayList<Intersectable>();
 		m_lights = new ArrayList<Light>();
+		m_models_obj = new ArrayList<Model>();
 		loadLevelFromFile(path_1);
-		loadObjFromFile(path_2);
 	}
 
 	/*
@@ -58,9 +59,9 @@ public class Level {
 		String workingDir = System.getProperty("user.dir");
 		String finalPath = workingDir + "\\" + path;
 		String line;
+		long startTime = System.nanoTime();
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(finalPath));
-			long startTime = System.nanoTime();
 			while ((line = reader.readLine()) != null) {
 				String[] values = line.trim().split(" ");
 				if (line.startsWith("plane ")) {
@@ -81,6 +82,12 @@ public class Level {
 					RGBA light_c = new RGBA(Float.parseFloat(values[4]), Float.parseFloat(values[5]), Float.parseFloat(values[6]), Float.parseFloat(values[7]));
 					float light_i = Float.parseFloat(values[8]);
 					m_lights.add(new Light(light_p, light_c, light_i));
+				} else if (line.startsWith("model_obj ")) {
+					String model_obj_path = values[1];
+					Vector3f model_obj_p = new Vector3f(Float.parseFloat(values[2]), Float.parseFloat(values[3]), Float.parseFloat(values[4]));
+					float model_obj_s = Float.parseFloat(values[5]);
+					int model_obj_t1 = Integer.parseInt(values[6]);
+					m_models_obj.add(new Model(model_obj_path, model_obj_p, model_obj_s, model_obj_t1));
 				} else if (line.startsWith("ambient ")) {
 					RGBA ambient_c = new RGBA(Float.parseFloat(values[1]), Float.parseFloat(values[2]), Float.parseFloat(values[3]), Float.parseFloat(values[4]));
 					m_light_ambient = ambient_c;
@@ -90,72 +97,26 @@ public class Level {
 				}
 			}
 			reader.close();
-			long endTime = System.nanoTime();
-			System.out.println("Map: " + finalPath + " loaded successfully!");
-			System.out.println("Total time taken to load the map: " + (endTime - startTime) / 1000000000.0 + "seconds");
 		} catch (Exception e) {
 			System.err.println("Error loading the level " + finalPath);
 			e.printStackTrace();
 		}
-	}
-
-	/*
-	 * .obj File structure
-	 * v = vertex
-	 * f = face
-	 * 
-	 * vertex xyz @ face pointer id can be found with this calculation from a 1-dimensional array:
-	 * (x or y or z, in other words 0 or 1 or 2) + f * 3 = Vertex line coordinate
-	 * so 1 + 2 * 3 would get the y coordinate of vertex found @ face id of 2
-	 * 
-	 * I just wrote that down so that I don't forget now that I worked it out by myself. :D Quite easy though, this took me like 1 hour or so.
-	 * Had no previous experience about this. Normal support will be easy to add, but I'll do that tomorrow.
-	 */
-	public void loadObjFromFile(String path) {
-		String workingDir = System.getProperty("user.dir");
-		String finalPath = workingDir + "\\" + path;
-		String line;
-
-		// .obj file format stuff
-		List<Float> vertices = new ArrayList<Float>();
-		List<Integer> faces = new ArrayList<Integer>();
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader(finalPath));
-			while ((line = reader.readLine()) != null) {
-				String[] values = line.trim().split(" ");
-				if (line.startsWith("v ")) {
-					vertices.add((float) Double.parseDouble(values[1]));
-					vertices.add((float) Double.parseDouble(values[2]));
-					vertices.add((float) Double.parseDouble(values[3]));
-				} else if (line.startsWith("f ")) {
-					faces.add(Integer.parseInt(values[1]));
-					faces.add(Integer.parseInt(values[2]));
-					faces.add(Integer.parseInt(values[3]));
-				}
+		for (int i = 0; i < m_models_obj.size(); i++) {
+			for (int j = 0; j < m_models_obj.get(i).getFaces().size(); j++) {
+				m_intersectables.add(m_models_obj.get(i).getFace(j));
 			}
-			reader.close();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
-		for (int i = 0; i < faces.size(); i += 3) {
-			int index_0 = faces.get(i) - 1;
-			int index_1 = faces.get(i + 1) - 1;
-			int index_2 = faces.get(i + 2) - 1;
-			Vector3f vertex_1 = new Vector3f(vertices.get(0 + index_0 * 3), vertices.get(1 + index_0 * 3), vertices.get(2 + index_0 * 3));
-			Vector3f vertex_2 = new Vector3f(vertices.get(0 + index_1 * 3), vertices.get(1 + index_1 * 3), vertices.get(2 + index_1 * 3));
-			Vector3f vertex_3 = new Vector3f(vertices.get(0 + index_2 * 3), vertices.get(1 + index_2 * 3), vertices.get(2 + index_2 * 3));
-			Vector3f[] verts = new Vector3f[] { vertex_1, vertex_2, vertex_3 };
-			m_intersectables.add(new Triangle(verts, new RGBA(1.0f, 1.0f, 1.0f, 1.0f), 0, 0));
-			System.out.println(vertex_1 + " " + vertex_2 + " " + vertex_3);
-		}
-
+		long endTime = System.nanoTime();
+		System.out.println("Map: " + finalPath + " loaded successfully!");
+		System.out.println("Map info - intersectables: " + m_intersectables.size() + " lights: " + m_lights.size() + " .obj models: " + m_models_obj.size());
+		System.out.println("Total time taken to load the map: " + (endTime - startTime) / 1000000000.0 + "seconds");
 	}
 
 	/*
 	 * getIntersectables()
 	 * returns m_intersectables
 	 */
-	public ArrayList<Intersectable> getIntersectables() {
+	public List<Intersectable> getIntersectables() {
 		return m_intersectables;
 	}
 
@@ -171,7 +132,7 @@ public class Level {
 	 * getLights()
 	 * returns m_lights
 	 */
-	public ArrayList<Light> getLights() {
+	public List<Light> getLights() {
 		return m_lights;
 	}
 

@@ -41,7 +41,7 @@ public class Level {
 	 * Level.java main update method
 	 */
 	public void update(float delta) {
-
+		
 	}
 
 	/*
@@ -142,6 +142,22 @@ public class Level {
 	 */
 	public Light getLight(int i) {
 		return m_lights.get(i);
+	}
+
+	/*
+	 * getModelsObj()
+	 * returns m_models_obj
+	 */
+	public List<Model> getModelsObj() {
+		return m_models_obj;
+	}
+
+	/*
+	 * getModelObj(int i)
+	 * returns object @ index i from m_models_obj
+	 */
+	public Model getModelObj(int i) {
+		return m_models_obj.get(i);
 	}
 
 	/*

@@ -24,14 +24,14 @@ public class Camera {
 	/*
 	 * Camera constructor
 	 */
-	public Camera(Vector3f pos, Vector3f eye) {
+	public Camera(Vector3f pos) {
 		this.pos = pos;
-		this.eye = eye;
+		eye = new Vector3f(0.0f, 0.0f, -1.0f);
 		view = new Vector3f();
 		up = new Vector3f(0.0f, 1.0f, 0.0f);
 		right = new Vector3f();
-		yaw = -105.0f;
-		pitch = -10.0f;
+		yaw = -90.0f;
+		pitch = 0.0f;
 		speed = 0.01f;
 		recalc();
 	}

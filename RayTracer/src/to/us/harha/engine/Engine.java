@@ -82,7 +82,7 @@ public class Engine extends Canvas implements Runnable {
 		// Initialize engine objects
 		display = new Display(Main.width, Main.height);
 		level = new Level("test.rtmap");
-		camera = new Camera(level.getPlayerSpawn(), new Vector3f(0.0f, 0.0f, -1.0f));
+		camera = new Camera(level.getPlayerSpawn());
 		addKeyListener(input = new Input());
 
 		// Initialize multithreading stuff
@@ -263,6 +263,7 @@ public class Engine extends Canvas implements Runnable {
 	 */
 	public void renderTrace(int i, int j, int thread) {
 		Ray primaryRay = new Ray();
+		RGBA nullColor = new RGBA(0.0f, 0.0f, 0.0f, 0.0f);
 		int width = display.getWidth();
 		int height = display.getHeight();
 		int yOffset = (height / THREAD_COUNT) * j;
@@ -273,6 +274,8 @@ public class Engine extends Canvas implements Runnable {
 				RGBA color = trace(primaryRay, 0);
 				if (color != null) {
 					display.drawPixel(x, y, color);
+				} else {
+					display.drawPixel(x, y, nullColor);
 				}
 			}
 		}
@@ -380,7 +383,7 @@ public class Engine extends Canvas implements Runnable {
 			}
 			dotProduct = intersection_final.norm.dotP(lightVector._unitV());
 			diffuseFactor = dotProduct;
-			specularFactor = (float) Math.pow(dotProduct, 20);
+			specularFactor = (float) Math.pow(dotProduct, 25);
 			attenuationFactorDiff = l.intensity / lightVector.length();
 			attenuationFactorSpec = (l.intensity) / (lightVector.length());
 			if (dotProduct > 0.0f && inShadow == false) {
@@ -411,7 +414,7 @@ public class Engine extends Canvas implements Runnable {
 					}
 				}
 				if (behindGlass) {
-					color_diffuse.scale(0.95f);
+					color_diffuse.scale(0.75f);
 				}
 			}
 
@@ -419,20 +422,20 @@ public class Engine extends Canvas implements Runnable {
 		if (object.getType_1() == 0) {
 			color_final.add(color_diffuse);
 		}
+		color_final.add(level.getLightAmbient());
+		color_final.scale(object.getHue());
 		if (object.getType_1() == 1 && color_reflection != null) {
 			color_final.add(color_reflection);
 		}
 		if (object.getType_1() == 2 && color_refraction != null) {
 			color_final.add(color_refraction);
 			if (color_reflection != null)
-				color_final.add(color_reflection.scaleR(0.20f));
+				color_final.add(color_reflection.scaleR(0.10f));
 		}
 		if (object.getType_1() == 0)
 			color_final.add(color_specular);
 		else
-			color_final.add(color_specular.scaleR(0.5f));
-		color_final.add(level.getLightAmbient());
-		color_final.scale(object.getHue());
+			color_final.add(color_specular.scaleR(1.0f));
 		return color_final;
 	}
 

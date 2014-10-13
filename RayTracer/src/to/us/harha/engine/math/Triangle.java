@@ -1,6 +1,6 @@
 package to.us.harha.engine.math;
 
-import to.us.harha.engine.gfx.RGBA;
+import to.us.harha.engine.gfx.RGB;
 
 public class Triangle extends Intersectable {
 
@@ -17,7 +17,7 @@ public class Triangle extends Intersectable {
 	/*
 	 * Triangle constructor
 	 */
-	public Triangle(Vector3f[] vert, RGBA hue, int type_1, int type_2) {
+	public Triangle(Vector3f[] vert, RGB hue, int type_1, int type_2) {
 		this.vert = vert;
 		// Calculate triangle edge vectors and their direction is based on boolean n
 		edge_1 = vert[1]._sub(vert[0]);
@@ -79,7 +79,7 @@ public class Triangle extends Intersectable {
 		return pos;
 	}
 
-	public RGBA getHue() {
+	public RGB getHue() {
 		return hue;
 	}
 

@@ -21,7 +21,7 @@ public class Display {
 		Arrays.fill(m_pixels, 0x00000000);
 	}
 
-	public void drawPixel(int x, int y, RGBA color) {
+	public void drawPixel(int x, int y, RGB color) {
 		int index = x + y * m_width;
 		if (x >= 0 && x < m_width && y >= 0 && y < m_height) {
 			m_pixels[index] = (int) color.value;

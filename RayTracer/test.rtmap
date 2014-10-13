@@ -1,23 +1,33 @@
 // Planes
-plane 0.0f -10.0f 0.0f 0.0f 1.0f 0.0f 1.0f 1.0f 1.0f 1.0f 2 1
-plane 0.0f -10.1f 0.0f 0.0f 1.0f 0.0f 1.0f 1.0f 1.0f 1.0f 0 1
+plane 0.0f -20.0f 0.0f 0.0f 1.0f 0.0f 1.0f 1.0f 1.0f 0 0
+plane 0.0f 0.0f 0.0f 0.0f -1.0f 0.0f 1.0f 1.0f 1.0f 0 0
+plane 0.0f 0.0f -20.0f 0.0f 0.0f 1.0f 1.0f 1.0f 1.0f 0 0
+plane 0.0f 0.0f 20.0f 0.0f 0.0f -1.0f 1.0f 1.0f 1.0f 0 0
+plane -20.0f 0.0f 0.0f 1.0f 0.0f 0.0f 1.0f 1.0f 1.0f 0 0
+plane 20.0f 0.0f 0.0f -1.0f 0.0f 0.0f 1.0f 1.0f 1.0f 0 0
 
 // Spheres
-sphere -5.0f -9.0f -2.0f 1.0f 1.0f 1.0f 1.0f 1.0f 0
-sphere 5.0f -9.0f -2.0f 1.0f 1.0f 1.0f 1.0f 1.0f 2
-sphere 0.0f -8.0f -5.0f 0.0f 1.0f 1.0f 1.0f 2.0f 1
+sphere 0.0f -19.0f -10.0f 1.0f 1.0f 1.0f 1.0f 0
+sphere 5.0f -19.0f -10.0f 1.0f 1.0f 1.0f 1.0f 1
+sphere -5.0f -19.0f -10.0f 1.0f 1.0f 1.0f 1.0f 2
+sphere 0.0f -19.0f 10.0f 1.0f 1.0f 1.0f 1.0f 0
+sphere 5.0f -19.0f 10.0f 1.0f 1.0f 1.0f 1.0f 1
+sphere -5.0f -19.0f 10.0f 1.0f 1.0f 1.0f 1.0f 2
+sphere 10.0f -15.0f 0.0f 0.0f 0.0f 1.0f 1.0f 0
+sphere 10.0f -12.0f 5.0f 1.0f 1.0f 1.0f 1.0f 1
+sphere 10.0f -12.0f -5.0f 1.0f 1.0f 1.0f 1.0f 2
+sphere -10.0f -12.0f 0.0f 0.0f 1.0f 0.0f 1.0f 0
+sphere -10.0f -15.0f 5.0f 1.0f 1.0f 1.0f 1.0f 1
+sphere -10.0f -15.0f -5.0f 1.0f 1.0f 1.0f 1.0f 2
 
 // Lights
-light 0.0f -9.0f 0.0f 1.0f 1.0f 1.0f 1.0f 5.0f
-light -10.0f -5.0f 5.0f 1.0f 1.0f 1.0f 1.0f 5.0f
-light 10.0f -5.0f -5.0f 0.0f 1.0f 1.0f 1.0f 5.0f
-light -10.0f -5.0f -10.0f 0.25f 1.0f 0.0f 1.0f 5.0f
+light 0.0f -10.0f 0.0f 1.0f 1.0f 1.0f 0.0f 0.25f 1.0f 10.0f 20.0f
 
 // Models
-//model_obj test.obj 0.0f 0.0f 0.0f 1.0f 0
+//model_obj jraytext.obj 0.0f -5.0f 5.0f 1.0f 0
 
 // Level ambient light
-ambient 0.1f 0.1f 0.1f 1.0f
+ambient 0.1f 0.1f 0.1f
 
 // Player spawn location
-spawn 0.0f -5.0f 20.0f
+spawn 0.0f -19.0f 0.0f

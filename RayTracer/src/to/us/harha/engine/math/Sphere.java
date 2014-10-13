@@ -1,6 +1,6 @@
 package to.us.harha.engine.math;
 
-import to.us.harha.engine.gfx.RGBA;
+import to.us.harha.engine.gfx.RGB;
 
 public class Sphere extends Intersectable {
 
@@ -12,7 +12,7 @@ public class Sphere extends Intersectable {
 	/*
 	 * Sphere constructor
 	 */
-	public Sphere(Vector3f pos, RGBA hue, float r, int type_1) {
+	public Sphere(Vector3f pos, RGB hue, float r, int type_1) {
 		this.pos = pos;
 		this.r = r;
 		this.hue = hue;
@@ -60,7 +60,7 @@ public class Sphere extends Intersectable {
 		return pos;
 	}
 
-	public RGBA getHue() {
+	public RGB getHue() {
 		return hue;
 	}
 

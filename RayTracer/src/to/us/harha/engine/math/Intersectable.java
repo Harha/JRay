@@ -1,11 +1,11 @@
 package to.us.harha.engine.math;
 
-import to.us.harha.engine.gfx.RGBA;
+import to.us.harha.engine.gfx.RGB;
 
 public abstract class Intersectable {
 
 	// Intersectable object's hue
-	protected RGBA	hue;
+	protected RGB	hue;
 	// Intersectable object's material type
 	protected int	type_1;
 	// Intersectable object's texture pattern type
@@ -23,7 +23,7 @@ public abstract class Intersectable {
 
 	public abstract Vector3f getPos();
 
-	public abstract RGBA getHue();
+	public abstract RGB getHue();
 
 	public abstract int getType_1();
 

@@ -1,6 +1,6 @@
 package to.us.harha.engine.math;
 
-import to.us.harha.engine.gfx.RGBA;
+import to.us.harha.engine.gfx.RGB;
 
 public class Plane extends Intersectable {
 
@@ -12,7 +12,7 @@ public class Plane extends Intersectable {
 	/*
 	 * Plane constructor
 	 */
-	public Plane(Vector3f pos, Vector3f norm, RGBA hue, int type_1, int type_2) {
+	public Plane(Vector3f pos, Vector3f norm, RGB hue, int type_1, int type_2) {
 		this.pos = pos;
 		this.norm = norm._unitV();
 		this.hue = hue;
@@ -49,14 +49,14 @@ public class Plane extends Intersectable {
 		return pos;
 	}
 
-	public RGBA getHue() {
+	public RGB getHue() {
 		return hue;
 	}
 
 	public int getType_1() {
 		return type_1;
 	}
-	
+
 	public int getType_2() {
 		return type_2;
 	}

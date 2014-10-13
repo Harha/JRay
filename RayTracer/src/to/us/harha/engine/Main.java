@@ -12,10 +12,14 @@ public class Main {
 	public static final int		width	= 1280 / 4;
 	// Main display's drawing space height
 	public static final int		height	= width / 16 * 9;
+	// Main display's drawing space aspect ratio
+	public static final int		ar		= width / height;
 	// Main display's drawing space scale
 	public static final int		scale	= 4;
 	// Static engine object
-	private static Engine		engine;
+	public static Engine		engine;
+	// Static general logger object
+	public static Log			logger_main = new Log("MAIN");
 
 	public static void main(String args[]) {
 		engine = new Engine();

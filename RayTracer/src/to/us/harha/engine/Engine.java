@@ -17,11 +17,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.JFrame;
 
 import to.us.harha.engine.Main;
-import to.us.harha.engine.gfx.RGBA;
+import to.us.harha.engine.gfx.RGB;
 import to.us.harha.engine.gfx.Display;
 import to.us.harha.engine.math.Intersectable;
 import to.us.harha.engine.math.Intersection;
 import to.us.harha.engine.math.Light;
+import to.us.harha.engine.math.MathUtils;
 import to.us.harha.engine.math.Ray;
 import to.us.harha.engine.math.Vector3f;
 
@@ -60,6 +61,7 @@ public class Engine extends Canvas implements Runnable {
 	private Camera					camera;
 	private Input					input;
 	private Level					level;
+	private Log						logger_engine;
 
 	// Multi-threading
 	private final int				THREAD_COUNT;
@@ -84,6 +86,7 @@ public class Engine extends Canvas implements Runnable {
 		level = new Level("test.rtmap");
 		camera = new Camera(level.getPlayerSpawn());
 		addKeyListener(input = new Input());
+		logger_engine = new Log("ENGINE");
 
 		// Initialize multithreading stuff
 		THREAD_COUNT = 4;
@@ -111,7 +114,7 @@ public class Engine extends Canvas implements Runnable {
 	public synchronized void stop() {
 		running = false;
 		frame.setTitle(Main.TITLE + " Stopped...");
-		System.out.println("Main worker thread stopped!");
+		logger_engine.printMsg("Main worker thread stopped!");
 		try {
 			thread.join();
 		} catch (InterruptedException e) {
@@ -182,8 +185,7 @@ public class Engine extends Canvas implements Runnable {
 		// Simple counter to print out info at chosen interval
 		counter.addAndGet(1);
 		if (counter.get() >= 1000) {
-			System.out.println(e.toString());
-			System.out.println("FPS: " + frames[4]);
+			logger_engine.printMsg("FPS: " + frames[4] + " THREAD INFO: " + e.toString());
 			counter.set(0);
 		}
 	}
@@ -263,7 +265,7 @@ public class Engine extends Canvas implements Runnable {
 	 */
 	public void renderTrace(int i, int j, int thread) {
 		Ray primaryRay = new Ray();
-		RGBA nullColor = new RGBA(0.0f, 0.0f, 0.0f, 0.0f);
+		RGB nullColor = new RGB(0.0f, 0.0f, 0.0f);
 		int width = display.getWidth();
 		int height = display.getHeight();
 		int yOffset = (height / THREAD_COUNT) * j;
@@ -271,7 +273,7 @@ public class Engine extends Canvas implements Runnable {
 			int xOffset = (width / THREAD_COUNT) * i;
 			for (int x = xOffset; x < (width / THREAD_COUNT) + xOffset; x++) {
 				primaryRay.primaryCast(x, y, display.getWidth(), display.getHeight(), camera);
-				RGBA color = trace(primaryRay, 0);
+				RGB color = trace(primaryRay, 0);
 				if (color != null) {
 					display.drawPixel(x, y, color);
 				} else {
@@ -287,7 +289,7 @@ public class Engine extends Canvas implements Runnable {
 	 * Trace(Ray ray, int n)
 	 * n = recursive level
 	 */
-	private RGBA trace(Ray ray, int n) {
+	private RGB trace(Ray ray, int n) {
 		if (n >= MAX_N) {
 			return null;
 		}
@@ -295,11 +297,11 @@ public class Engine extends Canvas implements Runnable {
 		Intersection intersection_final = null;
 		Intersection intersection_light = null;
 		Intersectable object = null;
-		RGBA color_diffuse = new RGBA();
-		RGBA color_specular = new RGBA();
-		RGBA color_reflection = new RGBA();
-		RGBA color_refraction = new RGBA();
-		RGBA color_final = new RGBA();
+		RGB color_diffuse = new RGB();
+		RGB color_specular = new RGB();
+		RGB color_reflection = new RGB();
+		RGB color_refraction = new RGB();
+		RGB color_final = new RGB();
 		float finalDistance = Float.MAX_VALUE;
 		/*
 		 * Cast the initial ray and test if it intersects with anything
@@ -316,6 +318,11 @@ public class Engine extends Canvas implements Runnable {
 		}
 		if (intersection_final == null)
 			return null;
+
+		Vector3f V = ray.dir;
+		Vector3f P = intersection_final.pos;
+		Vector3f N = intersection_final.norm;
+
 		/*
 		 * Case 1: Object is made of glass or is a mirror
 		 * Split the ray into a reflection and refraction ray based on the object type
@@ -327,9 +334,9 @@ public class Engine extends Canvas implements Runnable {
 			 * V = ray.dir
 			 * Reflection: 2.0f * N * dot(N,V) - V
 			 */
-			float c1 = intersection_final.norm.dotP(ray.dir);
-			Vector3f reflectionVector = intersection_final.norm._scale(2.0f)._scale(c1)._sub(ray.dir);
-			Ray reflectionRay = new Ray(intersection_final.pos, reflectionVector._negate());
+			float c1 = N.dotP(V);
+			Vector3f reflectionVector = N._scale(2.0f)._scale(c1)._sub(V);
+			Ray reflectionRay = new Ray(P, reflectionVector._negate());
 			color_reflection = trace(reflectionRay, n + 1);
 			if (object.getType_1() == 2) {
 				/*
@@ -343,13 +350,13 @@ public class Engine extends Canvas implements Runnable {
 				if (c1 < 0.0f) {
 					float nIn = 1.0f / object.getDensity();
 					float c2 = (float) Math.sqrt(1.0f - (nIn * nIn) * (1.0f - (c1 * c1)));
-					refractionVector = ray.dir._scale(nIn)._add(intersection_final.norm._scale(nIn * c1 - c2));
+					refractionVector = V._scale(nIn)._add(N._scale(nIn * c1 - c2));
 				} else {
 					float nIn = object.getDensity() / 1.0f;
 					float c2 = (float) Math.sqrt(1.0f - (nIn * nIn) * (1.0f - (c1 * c1)));
-					refractionVector = ray.dir._scale(nIn)._add(intersection_final.norm._scale(nIn * c1 - c2));
+					refractionVector = V._scale(nIn)._add(N._scale(nIn * c1 - c2));
 				}
-				Ray refractionRay = new Ray(intersection_final.pos, refractionVector);
+				Ray refractionRay = new Ray(P, refractionVector);
 				color_refraction = trace(refractionRay, n + 1);
 			}
 		}
@@ -357,14 +364,16 @@ public class Engine extends Canvas implements Runnable {
 		 * Case 2: Object is also a diffuse object
 		 * Compute illumination (Diffuse and specular colors)
 		 */
-		float dotProduct = 0.0f;
+		Vector3f lightVector;
+		float lightVLength;
+		float NdotL = 0.0f;
 		float diffuseFactor = 0.0f;
-		float attenuationFactorDiff = 1.0f;
-		float attenuationFactorSpec = 1.0f;
 		float specularFactor = 0.0f;
+		float diffuseFactorAtt = 1.0f;
+		float specularFactorAtt = 1.0f;
 		for (Light l : level.getLights()) {
-			Vector3f lightVector = l.pos._sub(intersection_final.pos);
-			Ray shadowRay = new Ray(intersection_final.pos, lightVector);
+			lightVector = l.pos._sub(P);
+			Ray shadowRay = new Ray(P, lightVector);
 			boolean inShadow = false;
 			boolean behindGlass = false;
 			for (Intersectable i : level.getIntersectables()) {
@@ -381,48 +390,30 @@ public class Engine extends Canvas implements Runnable {
 					}
 				}
 			}
-			dotProduct = intersection_final.norm.dotP(lightVector._unitV());
-			diffuseFactor = dotProduct;
-			specularFactor = (float) Math.pow(dotProduct, 25);
-			attenuationFactorDiff = l.intensity / lightVector.length();
-			attenuationFactorSpec = (l.intensity) / (lightVector.length());
-			if (dotProduct > 0.0f && inShadow == false) {
-				color_diffuse.add(l.col.scaleR(diffuseFactor).scaleR(attenuationFactorDiff));
-				color_specular._add(specularFactor * attenuationFactorSpec);
-				/*
-				 * Checkerboard texture calculation
-				 */
-				if (object.getType_2() == 1) {
-					int square_xz = (int) (Math.floor(intersection_final.pos.x) + Math.floor(intersection_final.pos.z));
-					if ((square_xz % 2) == 0) {
-						color_diffuse.scale(new RGBA(0.0f, 0.0f, 0.0f, 0.0f));
-						color_specular.scale(new RGBA(0.0f, 0.0f, 0.0f, 0.0f));
-					}
-				}
-				if (object.getType_2() == 2) {
-					int square_yz = (int) (Math.floor(intersection_final.pos.y) + Math.floor(intersection_final.pos.z));
-					if ((square_yz % 2) == 0) {
-						color_diffuse.scale(new RGBA(0.0f, 0.0f, 0.0f, 0.0f));
-						color_specular.scale(new RGBA(0.0f, 0.0f, 0.0f, 0.0f));
-					}
-				}
-				if (object.getType_2() == 3) {
-					int square_xy = (int) (Math.floor(intersection_final.pos.x) + Math.floor(intersection_final.pos.y));
-					if ((square_xy % 2) == 0) {
-						color_diffuse.scale(new RGBA(0.0f, 0.0f, 0.0f, 0.0f));
-						color_specular.scale(new RGBA(0.0f, 0.0f, 0.0f, 0.0f));
-					}
-				}
-				if (behindGlass) {
+			// Calculate the lightvector's length and then normalize it
+			lightVLength = lightVector.length();
+			lightVector.unitV();
+			// Calculate the intensity of the diffuse light
+			NdotL = N.dotP(lightVector);
+			diffuseFactor = MathUtils.clampf(NdotL, 0.0f, 1.0f);
+			diffuseFactorAtt = l.intensity_diff / lightVLength;
+			// Calculate the specular reflection
+			// This needs some fixing, can't figure it out atm
+			Vector3f LhalfV = lightVector._sub(V)._unitV();
+			float NdotH = N.dotP(LhalfV);
+			specularFactor = (float) Math.pow(MathUtils.clampf(NdotH, 0.0f, 1.0f), 25);
+			specularFactorAtt = l.intensity_spec / lightVLength;
+			if (NdotL > 0.0f && !inShadow) {
+				if (object.getType_1() == 0)
+					color_diffuse.add(l.col_diff.scaleR(diffuseFactor * diffuseFactorAtt));
+				if (NdotH > 0.0f)
+					color_specular.add(l.col_spec.scaleR(specularFactor * specularFactorAtt));
+				if (behindGlass)
 					color_diffuse.scale(0.75f);
-				}
 			}
-
-		}
-		if (object.getType_1() == 0) {
-			color_final.add(color_diffuse);
 		}
 		color_final.add(level.getLightAmbient());
+		color_final.add(color_diffuse);
 		color_final.scale(object.getHue());
 		if (object.getType_1() == 1 && color_reflection != null) {
 			color_final.add(color_reflection);
@@ -435,7 +426,7 @@ public class Engine extends Canvas implements Runnable {
 		if (object.getType_1() == 0)
 			color_final.add(color_specular);
 		else
-			color_final.add(color_specular.scaleR(1.0f));
+			color_final.add(color_specular.scaleR(0.25f));
 		return color_final;
 	}
 

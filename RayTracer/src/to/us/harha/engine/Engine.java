@@ -327,7 +327,7 @@ public class Engine extends Canvas implements Runnable {
 		 * Case 1: Object is made of glass or is a mirror
 		 * Split the ray into a reflection and refraction ray based on the object type
 		 */
-		if (object.getType_1() == 1 || object.getType_1() == 2) {
+		if (object.getMaterial() == 1 || object.getMaterial() == 2) {
 			/*
 			 * Case 1.0 Ray is reflective or reflective and refractive.
 			 * Calculate reflection first.
@@ -338,7 +338,7 @@ public class Engine extends Canvas implements Runnable {
 			Vector3f reflectionVector = N._scale(2.0f)._scale(c1)._sub(V);
 			Ray reflectionRay = new Ray(P, reflectionVector._negate());
 			color_reflection = trace(reflectionRay, n + 1);
-			if (object.getType_1() == 2) {
+			if (object.getMaterial() == 2) {
 				/*
 				 * Case 1.1 Ray is going into the medium
 				 * V.N < 0.0f
@@ -367,6 +367,7 @@ public class Engine extends Canvas implements Runnable {
 		Vector3f lightVector;
 		float lightVLength;
 		float NdotL = 0.0f;
+		float NdotH = 0.0f;
 		float diffuseFactor = 0.0f;
 		float specularFactor = 0.0f;
 		float diffuseFactorAtt = 1.0f;
@@ -381,7 +382,7 @@ public class Engine extends Canvas implements Runnable {
 					intersection_light = i.intersect(shadowRay, 0);
 					if (intersection_light != null) {
 						if (intersection_light.dist < lightVector.length()) {
-							if (i.getType_1() != 2) {
+							if (i.getMaterial() != 2) {
 								inShadow = true;
 							} else {
 								behindGlass = true;
@@ -398,13 +399,14 @@ public class Engine extends Canvas implements Runnable {
 			diffuseFactor = MathUtils.clampf(NdotL, 0.0f, 1.0f);
 			diffuseFactorAtt = l.intensity_diff / lightVLength;
 			// Calculate the specular reflection
-			// This needs some fixing, can't figure it out atm
-			Vector3f LhalfV = lightVector._sub(V)._unitV();
-			float NdotH = N.dotP(LhalfV);
-			specularFactor = (float) Math.pow(MathUtils.clampf(NdotH, 0.0f, 1.0f), 25);
+			// This could be optimized somehow
+			Vector3f L_dir = P._sub(l.pos);
+			Vector3f R = N._scale(2.0f)._scale(N.dotP(L_dir))._sub(L_dir)._unitV();
+			NdotH = R.dotP(V);
+			specularFactor = (float) Math.pow(NdotH, 25);
 			specularFactorAtt = l.intensity_spec / lightVLength;
 			if (NdotL > 0.0f && !inShadow) {
-				if (object.getType_1() == 0)
+				if (object.getMaterial() != 2)
 					color_diffuse.add(l.col_diff.scaleR(diffuseFactor * diffuseFactorAtt));
 				if (NdotH > 0.0f)
 					color_specular.add(l.col_spec.scaleR(specularFactor * specularFactorAtt));
@@ -413,20 +415,19 @@ public class Engine extends Canvas implements Runnable {
 			}
 		}
 		color_final.add(level.getLightAmbient());
+		if (object.getMaterial() == 1)
+			color_diffuse.subF(object.getReflectivity());
 		color_final.add(color_diffuse);
 		color_final.scale(object.getHue());
-		if (object.getType_1() == 1 && color_reflection != null) {
-			color_final.add(color_reflection);
+		if (object.getMaterial() == 1 && color_reflection != null) {
+			color_final.add(color_reflection.scaleR(object.getReflectivity()));
 		}
-		if (object.getType_1() == 2 && color_refraction != null) {
+		if (object.getMaterial() == 2 && color_refraction != null) {
 			color_final.add(color_refraction);
 			if (color_reflection != null)
 				color_final.add(color_reflection.scaleR(0.10f));
 		}
-		if (object.getType_1() == 0)
-			color_final.add(color_specular);
-		else
-			color_final.add(color_specular.scaleR(0.25f));
+		color_final.add(color_specular);
 		return color_final;
 	}
 

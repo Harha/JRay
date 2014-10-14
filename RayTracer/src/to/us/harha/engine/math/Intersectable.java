@@ -7,9 +7,9 @@ public abstract class Intersectable {
 	// Intersectable object's hue
 	protected RGB	hue;
 	// Intersectable object's material type
-	protected int	type_1;
-	// Intersectable object's texture pattern type
-	protected int	type_2;
+	protected int	material;
+	// Intersectable object's material reflectivity
+	protected float	reflectivity;
 	// Intersectable object's material density
 	protected float	density;
 
@@ -25,9 +25,9 @@ public abstract class Intersectable {
 
 	public abstract RGB getHue();
 
-	public abstract int getType_1();
-
-	public abstract int getType_2();
+	public abstract int getMaterial();
+	
+	public abstract float getReflectivity();
 
 	public abstract float getDensity();
 

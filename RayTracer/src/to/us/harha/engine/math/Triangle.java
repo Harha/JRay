@@ -17,7 +17,7 @@ public class Triangle extends Intersectable {
 	/*
 	 * Triangle constructor
 	 */
-	public Triangle(Vector3f[] vert, RGB hue, int type_1, int type_2) {
+	public Triangle(Vector3f[] vert, RGB hue, int material, float reflectivity) {
 		this.vert = vert;
 		// Calculate triangle edge vectors and their direction is based on boolean n
 		edge_1 = vert[1]._sub(vert[0]);
@@ -25,8 +25,8 @@ public class Triangle extends Intersectable {
 		// calculate triangle normal vector
 		norm = edge_1.cross(edge_2)._unitV();
 		this.hue = hue;
-		this.type_1 = type_1;
-		this.type_2 = type_2;
+		this.material = material;
+		this.reflectivity = reflectivity;
 		this.density = 1.25f;
 	}
 
@@ -83,12 +83,12 @@ public class Triangle extends Intersectable {
 		return hue;
 	}
 
-	public int getType_1() {
-		return type_1;
+	public int getMaterial() {
+		return material;
 	}
 
-	public int getType_2() {
-		return type_2;
+	public float getReflectivity() {
+		return reflectivity;
 	}
 
 	public float getDensity() {

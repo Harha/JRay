@@ -4,12 +4,18 @@ import to.us.harha.engine.math.MathUtils;
 
 public class RGB {
 
+	// Color red component
 	public float	r;
+	// Color green component
 	public float	g;
+	// Color blue component
 	public float	b;
-
+	// Color value as a hexadecimal
 	public long		value;
 
+	/*
+	 * Main RGB constructor
+	 */
 	public RGB(float r, float g, float b) {
 		this.r = r;
 		this.g = g;
@@ -18,6 +24,9 @@ public class RGB {
 		updateRGB();
 	}
 
+	/*
+	 * Blank RGB constructor
+	 */
 	public RGB() {
 		this.r = 0.0f;
 		this.g = 0.0f;
@@ -60,6 +69,10 @@ public class RGB {
 
 	public RGB subR(RGB c) {
 		return new RGB(r - c.r, g - c.g, b - c.b);
+	}
+
+	public RGB _subF(float f) {
+		return new RGB(r - f, g - f, b - f);
 	}
 
 	public void subF(float f) {

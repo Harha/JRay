@@ -12,11 +12,12 @@ public class Sphere extends Intersectable {
 	/*
 	 * Sphere constructor
 	 */
-	public Sphere(Vector3f pos, RGB hue, float r, int type_1) {
+	public Sphere(Vector3f pos, RGB hue, float r, int material, float reflectivity) {
 		this.pos = pos;
 		this.r = r;
 		this.hue = hue;
-		this.type_1 = type_1;
+		this.material = material;
+		this.reflectivity = reflectivity;
 		this.density = 1.52f;
 	}
 
@@ -64,12 +65,12 @@ public class Sphere extends Intersectable {
 		return hue;
 	}
 
-	public int getType_1() {
-		return type_1;
+	public int getMaterial() {
+		return material;
 	}
 
-	public int getType_2() {
-		return type_2;
+	public float getReflectivity() {
+		return reflectivity;
 	}
 
 	public float getDensity() {

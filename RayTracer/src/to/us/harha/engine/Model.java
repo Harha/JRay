@@ -13,7 +13,7 @@ public class Model {
 
 	private Vector3f		m_pos;
 	private float			m_scale;
-	private int				m_type_1;
+	private int				m_material;
 	private List<Triangle>	m_faces;
 
 	/*
@@ -21,11 +21,11 @@ public class Model {
 	 * Model.java main constructor
 	 * Loads a .obj model from the given path into memory
 	 */
-	public Model(String path, Vector3f pos, float scale, int type_1) {
+	public Model(String path, Vector3f pos, float scale, int material) {
 		m_faces = new ArrayList<Triangle>();
 		m_pos = pos;
 		m_scale = scale;
-		m_type_1 = type_1;
+		m_material = material;
 		loadObjFromFile(path);
 	}
 
@@ -76,7 +76,7 @@ public class Model {
 			Vector3f vertex_2 = new Vector3f(vertices.get(0 + index_1 * 3), vertices.get(1 + index_1 * 3), vertices.get(2 + index_1 * 3));
 			Vector3f vertex_3 = new Vector3f(vertices.get(0 + index_2 * 3), vertices.get(1 + index_2 * 3), vertices.get(2 + index_2 * 3));
 			Vector3f[] verts = new Vector3f[] { vertex_1._scale(m_scale)._add(m_pos), vertex_2._scale(m_scale)._add(m_pos), vertex_3._scale(m_scale)._add(m_pos) };
-			m_faces.add(new Triangle(verts, new RGB(1.0f, 1.0f, 1.0f), m_type_1, 0));
+			m_faces.add(new Triangle(verts, new RGB(1.0f, 1.0f, 1.0f), m_material, 1.0f));
 		}
 		long endTime = System.nanoTime();
 		Main.logger_main.printMsg("Model: " + finalPath + " loaded successfully!");

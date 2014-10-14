@@ -48,11 +48,11 @@ public class Level {
 	 * loadLevelFromFile(String path)
 	 * Loads a level from the input path
 	 * Level file structure:
-	 * plane	xp yp zp xn yn zn r g b a type_1 type_2
-	 * sphere	xp yp zp r g b a r type
-	 * triangle vx1 vy1 vz1 vx2 vy2 vz2 vx3 vy3 vz3 r g b a type_1 type_2
-	 * light	xp yp zp r g b a intensity
-	 * ambient	r g b a
+	 * plane	xp yp zp xn yn zn r g b material
+	 * sphere	xp yp zp r g b r type
+	 * triangle vx1 vy1 vz1 vx2 vy2 vz2 vx3 vy3 vz3 r g b material
+	 * light	xp yp zp r g b r g b intensity_diff intensity_spec
+	 * ambient	r g b
 	 * spawn	xp yp zp
 	 */
 	public void loadLevelFromFile(String path) {
@@ -68,15 +68,16 @@ public class Level {
 					Vector3f plane_p = new Vector3f(Float.parseFloat(values[1]), Float.parseFloat(values[2]), Float.parseFloat(values[3]));
 					Vector3f plane_n = new Vector3f(Float.parseFloat(values[4]), Float.parseFloat(values[5]), Float.parseFloat(values[6]));
 					RGB plane_c = new RGB(Float.parseFloat(values[7]), Float.parseFloat(values[8]), Float.parseFloat(values[9]));
-					int plane_t1 = Integer.parseInt(values[10]);
-					int plane_t2 = Integer.parseInt(values[11]);
-					m_intersectables.add(new Plane(plane_p, plane_n, plane_c, plane_t1, plane_t2));
+					int plane_m = Integer.parseInt(values[10]);
+					float plane_m_r = Float.parseFloat(values[11]);
+					m_intersectables.add(new Plane(plane_p, plane_n, plane_c, plane_m, plane_m_r));
 				} else if (line.startsWith("sphere ")) {
 					Vector3f sphere_p = new Vector3f(Float.parseFloat(values[1]), Float.parseFloat(values[2]), Float.parseFloat(values[3]));
 					RGB sphere_c = new RGB(Float.parseFloat(values[4]), Float.parseFloat(values[5]), Float.parseFloat(values[6]));
 					float sphere_r = Float.parseFloat(values[7]);
-					int sphere_t = Integer.parseInt(values[8]);
-					m_intersectables.add(new Sphere(sphere_p, sphere_c, sphere_r, sphere_t));
+					int sphere_m = Integer.parseInt(values[8]);
+					float sphere_m_r = Float.parseFloat(values[9]);
+					m_intersectables.add(new Sphere(sphere_p, sphere_c, sphere_r, sphere_m, sphere_m_r));
 				} else if (line.startsWith("light ")) {
 					Vector3f light_p = new Vector3f(Float.parseFloat(values[1]), Float.parseFloat(values[2]), Float.parseFloat(values[3]));
 					RGB light_c_d = new RGB(Float.parseFloat(values[4]), Float.parseFloat(values[5]), Float.parseFloat(values[6]));
@@ -88,8 +89,8 @@ public class Level {
 					String model_obj_path = values[1];
 					Vector3f model_obj_p = new Vector3f(Float.parseFloat(values[2]), Float.parseFloat(values[3]), Float.parseFloat(values[4]));
 					float model_obj_s = Float.parseFloat(values[5]);
-					int model_obj_t1 = Integer.parseInt(values[6]);
-					m_models_obj.add(new Model(model_obj_path, model_obj_p, model_obj_s, model_obj_t1));
+					int model_obj_m = Integer.parseInt(values[6]);
+					m_models_obj.add(new Model(model_obj_path, model_obj_p, model_obj_s, model_obj_m));
 				} else if (line.startsWith("ambient ")) {
 					RGB ambient_c = new RGB(Float.parseFloat(values[1]), Float.parseFloat(values[2]), Float.parseFloat(values[3]));
 					m_light_ambient = ambient_c;

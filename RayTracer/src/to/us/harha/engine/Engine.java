@@ -83,7 +83,7 @@ public class Engine extends Canvas implements Runnable {
 
 		// Initialize engine objects
 		display = new Display(Main.width, Main.height);
-		level = new Level("test.rtmap");
+		level = new Level("mainlevel.rtmap");
 		camera = new Camera(level.getPlayerSpawn());
 		addKeyListener(input = new Input());
 		logger_engine = new Log("ENGINE");

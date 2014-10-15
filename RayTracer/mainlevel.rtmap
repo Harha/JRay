@@ -1,0 +1,18 @@
+
+// Lights
+light -50.0f 50.0f 50.0f 1.0f 1.0f 1.0f 1.0f 1.0f 1.0f 20.0f 20.0f
+light 0.0f 0.0f 0.0f 1.0f 1.0f 1.0f 1.0f 1.0f 1.0f 10.0f 10.0f
+light 45.0f -5.0f -5.0f 0.0f 0.0f 1.0f 1.0f 1.0f 1.0f 5.0f 10.0f
+light 45.0f -5.0f -25.0f 0.0f 1.0f 1.0f 1.0f 1.0f 1.0f 5.0f 10.0f
+light 15.0f -5.0f -35.0f 1.0f 0.0f 1.0f 1.0f 1.0f 1.0f 5.0f 10.0f
+light 25.0f 5.0f -25.0f 1.0f 1.0f 1.0f 1.0f 1.0f 1.0f 5.0f 10.0f
+light 40.0f -5.0f 30.0f 1.0f 1.0f 1.0f 1.0f 1.0f 1.0f 5.0f 10.0f
+
+// Models
+model_obj models/weirdlevel.obj 0.0f 0.0f 0.0f 1.0f 0 0.0f
+
+// Level ambient light
+ambient 0.1f 0.1f 0.1f
+
+// Player spawn location
+spawn 0.0f 0.0f 0.0f

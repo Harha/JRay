@@ -1,6 +1,6 @@
 // Planes
-plane 0.0f -20.0f 0.0f 0.0f 1.0f 0.0f 0.25f 0.0f 1.0f 1 0.75f
-plane 0.0f 0.0f 0.0f 0.0f -1.0f 0.0f 1.0f 1.0f 1.0f 0 0.0f
+plane 0.0f -20.0f 0.0f 0.0f 1.0f 0.0f 1.0f 1.0f 1.0f 1 0.25f
+plane 0.0f 0.0f 0.0f 0.0f -1.0f 0.0f 1.0f 1.0f 1.0f 1 0.1f
 plane 0.0f 0.0f -20.0f 0.0f 0.0f 1.0f 1.0f 1.0f 1.0f 1 0.1f
 plane 0.0f 0.0f 20.0f 0.0f 0.0f -1.0f 1.0f 1.0f 1.0f 1 0.1f
 plane -20.0f 0.0f 0.0f 1.0f 0.0f 0.0f 1.0f 1.0f 1.0f 1 0.1f
@@ -11,29 +11,30 @@ sphere 0.0f -19.0f -10.0f 1.0f 1.0f 1.0f 1.0f 0 0.0f
 sphere 5.0f -19.0f -10.0f 1.0f 1.0f 1.0f 1.0f 1 1.0f
 sphere -5.0f -19.0f -10.0f 1.0f 1.0f 1.0f 1.0f 2 0.0f
 sphere 0.0f -19.0f 10.0f 1.0f 1.0f 1.0f 1.0f 0 0.0f
-sphere 5.0f -19.0f 10.0f 1.0f 1.0f 1.0f 1.0f 1 1.0f
+sphere 5.0f -19.0f 10.0f 1.0f 1.0f 1.0f 1.0f 1 0.25f
 sphere -5.0f -19.0f 10.0f 1.0f 1.0f 1.0f 1.0f 2 0.0f
-sphere 10.0f -15.0f 0.0f 0.0f 0.0f 1.0f 1.0f 0 0.0f
-sphere 10.0f -12.0f 5.0f 1.0f 1.0f 1.0f 1.0f 1 1.0f
+sphere 10.0f -15.0f 0.0f 0.0f 0.0f 1.0f 1.0f 1 0.5f
+sphere 10.0f -12.0f 5.0f 1.0f 1.0f 1.0f 1.0f 1 0.5f
 sphere 10.0f -12.0f -5.0f 1.0f 1.0f 1.0f 1.0f 2 0.0f
-sphere -10.0f -12.0f 0.0f 0.0f 1.0f 0.0f 1.0f 0 0.0f
-sphere -10.0f -15.0f 5.0f 1.0f 1.0f 1.0f 1.0f 1 1.0f
+sphere -10.0f -12.0f 0.0f 0.0f 1.0f 0.0f 1.0f 1 0.25f
+sphere -10.0f -15.0f 5.0f 1.0f 1.0f 1.0f 1.0f 1 0.75f
 sphere -10.0f -15.0f -5.0f 1.0f 1.0f 1.0f 1.0f 2 0.0f
 
 // Lights
-light 0.0f -10.0f 0.0f 1.0f 1.0f 0.75f 1.0f 1.0f 1.0f 5.0f 10.0f
-light 17.5f -17.5f -17.5f 0.0f 0.0f 1.0f 1.0f 1.0f 1.0f 1.0f 2.0f
-light -17.5f -17.5f -17.5f 0.0f 1.0f 0.0f 1.0f 1.0f 1.0f 1.0f 2.0f
-light 17.5f -17.5f 17.5f 1.0f 0.0f 0.0f 1.0f 1.0f 1.0f 1.0f 2.0f
-light -17.5f -17.5f 17.5f 0.0f 1.0f 1.0f 1.0f 1.0f 1.0f 1.0f 2.0f
+light 0.0f -5.0f 0.0f 1.0f 1.0f 0.75f 1.0f 1.0f 1.0f 10.0f 10.0f
+light 17.5f -17.5f -17.5f 0.0f 0.0f 1.0f 1.0f 1.0f 1.0f 1.0f 5.0f
+light -17.5f -17.5f -17.5f 0.0f 1.0f 0.0f 1.0f 1.0f 1.0f 1.0f 5.0f
+light 17.5f -17.5f 17.5f 1.0f 0.0f 0.0f 1.0f 1.0f 1.0f 1.0f 5.0f
+light -17.5f -17.5f 17.5f 0.0f 1.0f 1.0f 1.0f 1.0f 1.0f 1.0f 5.0f
 
 // Models
-model_obj suzanne.obj 0.0f -12.5f -15.0f 3.75f 0
-model_obj suzanne.obj 10.0f -12.5f -15.0f 3.75f 1
-model_obj suzanne.obj -10.0f -12.5f -15.0f 3.75f 2
+//model_obj models/suzanne.obj 0.0f -10.0f -15.0f 3.75f 0 0.0f
+model_obj models/cube.obj 0.0f -18.0f 0.0f 2.0f 1 0.1f
+model_obj models/cube.obj 10.0f -19.0f 5.0f 1.0f 1 0.1f
+model_obj models/cube.obj -10.0f -19.0f -5.0f 1.0f 0 0.0f
 
 // Level ambient light
 ambient 0.1f 0.1f 0.1f
 
 // Player spawn location
-spawn 19.75f -17.5f 19.75f
+spawn 0.0f -17.5f 19.75f

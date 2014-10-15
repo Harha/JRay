@@ -33,7 +33,7 @@ public class Ray {
 	public void primaryCast(int x, int y, int w, int h, Camera camera) {
 		pos = camera.pos;
 		float x_norm = ((x - w / 2.0f) / w) * Main.ar;
-		float y_norm = (h / 2.0f - y) / h;
+		float y_norm = ((h / 2.0f - y) / h) * Main.ar;
 		Vector3f ray_direction = camera.right._scale(x_norm)._add(camera.up._scale(y_norm))._add(pos)._add(camera.view);
 		dir = ray_direction._sub(pos)._unitV();
 	}

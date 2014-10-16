@@ -1,0 +1,27 @@
+// Level lights
+light 0.0f 20.0f -20.0f 1.0f 1.0f 1.0f 1.0f 1.0f 1.0f 5.0f 10.0f
+light 5.0f 10.0f 0.0f 1.0f 1.0f 1.0f 1.0f 1.0f 1.0f 5.0f 16.0f
+
+// Level planes
+plane 0.0f 0.0f 0.0f 0.0f 1.0f 0.0f 1.0f 1.0f 1.0f 1 0.75f
+plane 0.0f 50.0f 0.0f 0.0f -1.0f 0.0f 1.0f 1.0f 1.0f 0 1.0f
+plane 0.0f 0.0f -50.0f 0.0f 0.0f 1.0f 1.0f 1.0f 1.0f 0 1.0f
+
+// Level spheres
+sphere -2.0f 1.0f -12.5f 1.0f 0.0f 0.0f 1.0f 1 1.0f
+sphere 2.0f 1.0f -12.5f 0.0f 1.0f 0.0f 1.0f 1 0.75f
+sphere -3.75f 1.0f -10.0f 0.0f 0.0f 1.0f 1.0f 2 0.75f
+sphere 3.75f 1.0f -10.0f 1.0f 1.0f 1.0f 1.0f 1 1.0f
+sphere 0.0f 2.25f -10.0f 0.0f 1.0f 1.0f 1.0f 1 0.375f
+
+// Level models
+model_obj models/diamond.obj 0.0f 0.875f -10.0f 1.0f 1.0f 1.0f 1.0f 1 1.0f
+//model_obj models/teapot_hires.obj 0.0f 0.0f -25.0f 1.0f 1.0f 1.0f 3.75f 0 1.0f
+//model_obj models/torusknot.obj 7.5f 1.5f -5.0f 1.0f 1.0f 1.0f 1.0f 0 1.0f
+//model_obj models/torus.obj -7.5f 1.0f -5.0f 1.0f 0.0f 1.0f 2.0f 2 1.0f
+
+// Level ambient light
+ambient 0.1f 0.1f 0.1f
+
+// Player spawn location
+spawn 0.0f 3.75f 10.0f

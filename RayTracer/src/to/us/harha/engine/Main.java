@@ -9,13 +9,13 @@ public class Main {
 	// Program's default title
 	public static final String	TITLE		= "Raytracer";
 	// Main display's drawing space width
-	public static int			width		= 1280 / 1;
+	public static int			width		= 1280 / 8;
 	// Main display's drawing space height
 	public static int			height		= width / 16 * 9;
 	// Main display's drawing space aspect ratio
-	public static int			ar			= width / height;
+	public static float			ar			= (float) width / height;
 	// Main display's drawing space scale
-	public static int			scale		= 1;
+	public static int			scale		= 8;
 	// Static engine object
 	public static Engine		engine;
 	// Static general logger object
@@ -40,6 +40,7 @@ public class Main {
 			}
 			ar = width / height;
 		}
+		System.out.println(ar);
 		engine = new Engine();
 		engine.frame.setResizable(false);
 		engine.frame.setTitle(TITLE + " | Initializing...");

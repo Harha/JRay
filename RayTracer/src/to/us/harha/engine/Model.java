@@ -12,6 +12,7 @@ import to.us.harha.engine.math.Vector3f;
 public class Model {
 
 	private Vector3f		m_pos;
+	private RGB				m_col;
 	private float			m_scale;
 	private int				m_material;
 	private float			m_reflectivity;
@@ -22,9 +23,10 @@ public class Model {
 	 * Model.java main constructor
 	 * Loads a .obj model from the given path into memory
 	 */
-	public Model(String path, Vector3f pos, float scale, int material, float reflectivity) {
+	public Model(String path, Vector3f pos, RGB col, float scale, int material, float reflectivity) {
 		m_faces = new ArrayList<Triangle>();
 		m_pos = pos;
+		m_col = col;
 		m_scale = scale;
 		m_material = material;
 		m_reflectivity = reflectivity;
@@ -78,7 +80,7 @@ public class Model {
 			Vector3f vertex_2 = new Vector3f(vertices.get(0 + index_1 * 3), vertices.get(1 + index_1 * 3), vertices.get(2 + index_1 * 3));
 			Vector3f vertex_3 = new Vector3f(vertices.get(0 + index_2 * 3), vertices.get(1 + index_2 * 3), vertices.get(2 + index_2 * 3));
 			Vector3f[] verts = new Vector3f[] { vertex_1._scale(m_scale)._add(m_pos), vertex_2._scale(m_scale)._add(m_pos), vertex_3._scale(m_scale)._add(m_pos) };
-			m_faces.add(new Triangle(verts, new RGB(1.0f, 1.0f, 1.0f), m_material, m_reflectivity));
+			m_faces.add(new Triangle(verts, m_col, m_material, m_reflectivity));
 		}
 		long endTime = System.nanoTime();
 		Main.logger_main.printMsg("Model: " + finalPath + " loaded successfully!");

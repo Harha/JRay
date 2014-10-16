@@ -33,7 +33,8 @@ public class Engine extends Canvas implements Runnable {
 
 	// Integers
 	private final int				MAX_N				= 5;
-	private static AtomicInteger	counter				= new AtomicInteger(0);
+	private static AtomicInteger	counter_timer		= new AtomicInteger(0);
+	private static AtomicInteger	counter_render		= new AtomicInteger(0);
 
 	// Floats
 	private float[]					delta;
@@ -83,7 +84,7 @@ public class Engine extends Canvas implements Runnable {
 
 		// Initialize engine objects
 		display = new Display(Main.width, Main.height);
-		level = new Level("mainlevel.rtmap");
+		level = new Level("level.rtmap");
 		camera = new Camera(level.getPlayerSpawn());
 		addKeyListener(input = new Input());
 		logger_engine = new Log("ENGINE");
@@ -132,11 +133,11 @@ public class Engine extends Canvas implements Runnable {
 			lastFPS[i] = getTime();
 		}
 		requestFocus();
+		runRenderThreads();
 		while (running) {
 			updateDelta(THREAD_COUNT);
 			updateFPS(THREAD_COUNT);
 			update(delta[THREAD_COUNT]);
-			runRenderThreads();
 			try {
 				e.awaitTermination(10, TimeUnit.MILLISECONDS);
 			} catch (InterruptedException e) {
@@ -183,10 +184,10 @@ public class Engine extends Canvas implements Runnable {
 			running = false;
 
 		// Simple counter to print out info at chosen interval
-		counter.addAndGet(1);
-		if (counter.get() >= 1000) {
-			logger_engine.printMsg("FPS: " + frames[4] + " THREAD INFO: " + e.toString());
-			counter.set(0);
+		counter_timer.addAndGet(1);
+		if (counter_timer.get() >= 1000) {
+			logger_engine.printMsg("FPS: " + frames[4] + " Thread count: " + THREAD_COUNT + " Render tasks completed: " + counter_render.get());
+			counter_timer.set(0);
 		}
 	}
 
@@ -197,37 +198,49 @@ public class Engine extends Canvas implements Runnable {
 	public void runRenderThreads() {
 		e.execute(new Runnable() {
 			public void run() {
-				for (int y = 0; y < THREAD_COUNT / 2; y++) {
-					for (int x = 0; x < THREAD_COUNT / 2; x++) {
-						renderTrace(x, y, 0);
+				while (running) {
+					for (int y = 0; y < THREAD_COUNT / 2; y++) {
+						for (int x = 0; x < THREAD_COUNT / 2; x++) {
+							renderTrace(x, y, 0);
+						}
 					}
+					counter_render.incrementAndGet();
 				}
 			}
 		});
 		e.execute(new Runnable() {
 			public void run() {
-				for (int y = 0; y < THREAD_COUNT / 2; y++) {
-					for (int x = THREAD_COUNT / 2; x < THREAD_COUNT; x++) {
-						renderTrace(x, y, 1);
+				while (running) {
+					for (int y = 0; y < THREAD_COUNT / 2; y++) {
+						for (int x = THREAD_COUNT / 2; x < THREAD_COUNT; x++) {
+							renderTrace(x, y, 1);
+						}
 					}
+					counter_render.incrementAndGet();
 				}
 			}
 		});
 		e.execute(new Runnable() {
 			public void run() {
-				for (int y = THREAD_COUNT / 2; y < THREAD_COUNT; y++) {
-					for (int x = 0; x < THREAD_COUNT / 2; x++) {
-						renderTrace(x, y, 2);
+				while (running) {
+					for (int y = THREAD_COUNT / 2; y < THREAD_COUNT; y++) {
+						for (int x = 0; x < THREAD_COUNT / 2; x++) {
+							renderTrace(x, y, 2);
+						}
 					}
+					counter_render.incrementAndGet();
 				}
 			}
 		});
 		e.execute(new Runnable() {
 			public void run() {
-				for (int y = THREAD_COUNT / 2; y < THREAD_COUNT; y++) {
-					for (int x = THREAD_COUNT / 2; x < THREAD_COUNT; x++) {
-						renderTrace(x, y, 3);
+				while (running) {
+					for (int y = THREAD_COUNT / 2; y < THREAD_COUNT; y++) {
+						for (int x = THREAD_COUNT / 2; x < THREAD_COUNT; x++) {
+							renderTrace(x, y, 3);
+						}
 					}
+					counter_render.incrementAndGet();
 				}
 			}
 		});
@@ -414,11 +427,6 @@ public class Engine extends Canvas implements Runnable {
 					color_diffuse.scale(0.75f);
 			}
 		}
-		color_final.add(level.getLightAmbient());
-		if (object.getMaterial() == 1)
-			color_diffuse.subF(object.getReflectivity());
-		color_final.add(color_diffuse);
-		color_final.scale(object.getHue());
 		if (object.getMaterial() == 1 && color_reflection != null) {
 			color_final.add(color_reflection.scaleR(object.getReflectivity()));
 		}
@@ -427,6 +435,9 @@ public class Engine extends Canvas implements Runnable {
 			if (color_reflection != null)
 				color_final.add(color_reflection.scaleR(0.10f));
 		}
+		color_final.add(level.getLightAmbient());
+		color_final.add(color_diffuse);
+		color_final.scale(object.getHue());
 		color_final.add(color_specular);
 		return color_final;
 	}

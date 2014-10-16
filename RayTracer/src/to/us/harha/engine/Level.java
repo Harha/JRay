@@ -48,9 +48,9 @@ public class Level {
 	 * loadLevelFromFile(String path)
 	 * Loads a level from the input path
 	 * Level file structure:
-	 * plane	xp yp zp xn yn zn r g b material
-	 * sphere	xp yp zp r g b r type
-	 * model	xp yp zp scale material reflectivity
+	 * plane	xp yp zp xn yn zn r g b material reflectivity
+	 * sphere	xp yp zp r g b r type reflectivity
+	 * model	xp yp zp r g b scale material reflectivity
 	 * light	xp yp zp r g b r g b intensity_diff intensity_spec
 	 * ambient	r g b
 	 * spawn	xp yp zp
@@ -88,10 +88,11 @@ public class Level {
 				} else if (line.startsWith("model_obj ")) {
 					String model_obj_path = values[1];
 					Vector3f model_obj_p = new Vector3f(Float.parseFloat(values[2]), Float.parseFloat(values[3]), Float.parseFloat(values[4]));
-					float model_obj_s = Float.parseFloat(values[5]);
-					int model_obj_m = Integer.parseInt(values[6]);
-					float model_obj_m_r = Float.parseFloat(values[7]);
-					m_models_obj.add(new Model(model_obj_path, model_obj_p, model_obj_s, model_obj_m, model_obj_m_r));
+					RGB model_obj_c = new RGB(Float.parseFloat(values[5]), Float.parseFloat(values[6]), Float.parseFloat(values[7]));
+					float model_obj_s = Float.parseFloat(values[8]);
+					int model_obj_m = Integer.parseInt(values[9]);
+					float model_obj_m_r = Float.parseFloat(values[10]);
+					m_models_obj.add(new Model(model_obj_path, model_obj_p, model_obj_c, model_obj_s, model_obj_m, model_obj_m_r));
 				} else if (line.startsWith("ambient ")) {
 					RGB ambient_c = new RGB(Float.parseFloat(values[1]), Float.parseFloat(values[2]), Float.parseFloat(values[3]));
 					m_light_ambient = ambient_c;
